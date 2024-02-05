@@ -1,17 +1,18 @@
-// Define the Blynk credentials
-#define BLYNK_TEMPLATE_ID "TMPL5ZnvWnEyA"
-#define BLYNK_TEMPLATE_NAME "Jack"
-#define BLYNK_AUTH_TOKEN "Jj6EUf-nw_kdUF3r0g5qqVg0RqlXvyQJ"
-
 #include <Arduino.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
-#include <BlynkSimpleEsp32.h>
 
+// Define the Blynk credentials
+#define BLYNK_TEMPLATE_ID "TMPL5ZnvWnEyA"
+#define BLYNK_TEMPLATE_NAME "Jack"
+#define BLYNK_AUTH_TOKEN "Jj6EUf-nw_kdUF3r0g5qqVg0RqlXvyQJ"
 #define BLYNK_PRINT Serial
+
+
+#include <BlynkSimpleEsp32.h>
 
 // Define the pins that we will use
 #define SENSOR 33
@@ -24,23 +25,29 @@ DHT_Unified dht(SENSOR, DHTTYPE);
 char ssid[] = "HelloWorld";
 char pass[] = "testtest";
 
+BLYNK_WRITE(V2)
+{
+  int pinValue = param.asInt(); // assigning incoming value from pin V0 to a variable
+  Serial.print("Received value from Blynk: ");
+  Serial.println(pinValue);
+  digitalWrite(LED,pinValue);
+  // Delay is only there so that we get a chance to see the LED value properly.
+  delay(1000);
+}
+
 void setup() {
   // Setup pins
   pinMode(LED, OUTPUT);
-  digitalWrite(LED, LOW);
+  // digitalWrite(LED, LOW);
 
   // Begin serial communication
   Serial.begin(9600);
   delay(100);
 
-  // Au début du setup, après la connexion série
+  // begin the Blynk session
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
   Blynk.run();
-
-  // begin the Blynk session
-  // ...
-  // ...
-  // ...
+  Blynk.syncVirtual(V2);
 
   // Start listening to the DHT11
   dht.begin();
@@ -76,10 +83,10 @@ void setup() {
   Blynk.virtualWrite(V0, relative_humidity_measure);
   // temperature
   Blynk.virtualWrite(V1, temp_measure);
-  
 
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
+  Serial.flush();
   ESP.deepSleep(5e6);
 }
 
