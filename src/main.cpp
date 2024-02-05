@@ -2,18 +2,27 @@
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <DHT_U.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+
+#define BLYNK_PRINT Serial
 
 // Define the pins that we will use
 #define SENSOR 33
 #define LED 26
 #define DHTTYPE DHT11
 
+// Define the Blynk credentials
+#define BLYNK_TEMPLATE_ID "TMPL5ZnvWnEyA"
+#define BLYNK_TEMPLATE_NAME "Jack"
+#define BLYNK_AUTH_TOKEN "Jj6EUf-nw_kdUF3r0g5qqVg0RqlXvyQJ"
+
 DHT_Unified dht(SENSOR, DHTTYPE);
 
-// WiFi credentials go here
-// ...
-// ...
-// ...
+// Avant le setup
+char ssid[] = "HelloWorld";
+char pass[] = "testtest";
 
 void setup() {
   // Setup pins
@@ -23,6 +32,10 @@ void setup() {
   // Begin serial communication
   Serial.begin(9600);
   delay(100);
+
+  // Au début du setup, après la connexion série
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  Blynk.run();
 
   // begin the Blynk session
   // ...
