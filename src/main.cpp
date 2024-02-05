@@ -1,3 +1,8 @@
+// Define the Blynk credentials
+#define BLYNK_TEMPLATE_ID "TMPL5ZnvWnEyA"
+#define BLYNK_TEMPLATE_NAME "Jack"
+#define BLYNK_AUTH_TOKEN "Jj6EUf-nw_kdUF3r0g5qqVg0RqlXvyQJ"
+
 #include <Arduino.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
@@ -12,11 +17,6 @@
 #define SENSOR 33
 #define LED 26
 #define DHTTYPE DHT11
-
-// Define the Blynk credentials
-#define BLYNK_TEMPLATE_ID "TMPL5ZnvWnEyA"
-#define BLYNK_TEMPLATE_NAME "Jack"
-#define BLYNK_AUTH_TOKEN "Jj6EUf-nw_kdUF3r0g5qqVg0RqlXvyQJ"
 
 DHT_Unified dht(SENSOR, DHTTYPE);
 
@@ -72,9 +72,11 @@ void setup() {
   }
 
   // Send data to Blynk
-  // ...
-  // ...
-  // ...
+  // humidity
+  Blynk.virtualWrite(V0, relative_humidity_measure);
+  // temperature
+  Blynk.virtualWrite(V1, temp_measure);
+  
 
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
